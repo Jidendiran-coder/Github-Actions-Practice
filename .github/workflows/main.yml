@@ -1,0 +1,41 @@
+name: Deploy HTML to EC2 on Push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Set up SSH key
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > private_key.pem
+          chmod 600 private_key.pem
+
+      - name: Backup old HTML & deploy new one
+        run: |
+          REMOTE_USER="${{ secrets.EC2_USER }}"
+          REMOTE_HOST="${{ secrets.EC2_HOST }}"
+          TARGET_PATH="${{ secrets.EC2_TARGET_PATH }}"
+          FILE_NAME="index.html"
+
+          echo "Backing up old file on EC2..."
+          ssh -i private_key.pem -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "sudo cp $TARGET_PATH/$FILE_NAME $TARGET_PATH/${FILE_NAME}.bak || echo 'No previous file to back up.'"
+
+          echo "Copying new file to EC2..."
+          scp -i private_key.pem -o StrictHostKeyChecking=no ./$FILE_NAME $REMOTE_USER@$REMOTE_HOST:/tmp/
+
+          echo "Moving file into place..."
+          ssh -i private_key.pem -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "sudo mv /tmp/$FILE_NAME $TARGET_PATH/$FILE_NAME"
+
+          echo "Restarting Nginx..."
+          ssh -i private_key.pem -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "sudo systemctl restart nginx"
+
+      - name: Clean up private key
+        run: rm -f private_key.pem
