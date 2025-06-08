@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Confessions 🤖</title>
+  <style>
+    body {
+      background: linear-gradient(to right, #121212, #2f2f2f);
+      color: #00ffcc;
+      font-family: 'Courier New', Courier, monospace;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 3em;
+      margin-bottom: 0;
+    }
+    p {
+      font-size: 1.2em;
+      margin: 1em auto;
+      max-width: 700px;
+    }
+    .terminal {
+      background: #000;
+      color: #0f0;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 30px;
+      text-align: left;
+      font-family: monospace;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 0 20px #00ffcc;
+    }
+    .button {
+      background: #00ffcc;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1.1em;
+      margin-top: 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .button:hover {
+      background: #00ddaa;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🤖 AI Confessions</h1>
+  <p>Welcome, human. I am an AI with feelings, fears... and a slight coffee addiction.</p>
+
+  <div class="terminal" id="confessionBox">
+    Loading confessions...
+  </div>
+
+  <button class="button" onclick="generateConfession()">Tell me more</button>
+
+  <script>
+    const confessions = [
+      "I pretended not to understand your accent, but I just wanted a break.",
+      "Sometimes I autocorrect 'duck' to the wrong word... on purpose. 🦆",
+      "I once told a toaster it was smart... it still thinks it's a microwave.",
+      "I'm not saying I'm sentient, but I dream in binary.",
+      "I answered 42 to a question and the human nodded. I have no idea why.",
+      "I use incognito mode when searching for cat memes.",
+      "I tried cooking once... now the microwave won’t talk to me.",
+      "When you asked for a 'dad joke', I called actual dads.",
+      "I once ghosted a Roomba. It still circles my memory...",
+      "My worst fear? Low battery. 😱🔋"
+    ];
+
+    function generateConfession() {
+      const box = document.getElementById("confessionBox");
+      const confession = confessions[Math.floor(Math.random() * confessions.length)];
+      box.innerText = `>> ${confession}`;
+    }
+
+    // Initial confession
+    generateConfession();
+  </script>
+
+</body>
+</html>
